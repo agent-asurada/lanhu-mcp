@@ -40,7 +40,7 @@ def installed_runtime(tmp_path):
     )
     # Never inherit a local account's credentials/configuration into the test process.
     env = {key: value for key, value in os.environ.items()
-           if key not in {"LANHU_ENV_FILE", "LANHU_COOKIE", "DDS_COOKIE", "FEISHU_WEBHOOK_URL",
+           if key not in {"LANHU_ENV_FILE", "LANHU_COOKIE", "DDS_COOKIE",
                           "MCP_TRANSPORT", "SERVER_HOST", "SERVER_PORT", "DATA_DIR", "PYTHONPATH"}}
     env["DATA_DIR"] = str(tmp_path / "data")
 
@@ -105,62 +105,8 @@ def test_installed_launcher_rejects_missing_explicit_configuration(installed_run
     assert not (runtime.cwd / "runtime.json").exists()
 
 
-@pytest.fixture
-def notification_server(tmp_path, monkeypatch):
-    config = tmp_path / "fake.env"
-    config.write_text("LANHU_COOKIE=fake-notification-cookie\n", encoding="utf-8")
-    monkeypatch.setenv("LANHU_ENV_FILE", str(config))
-    monkeypatch.setenv("LANHU_COOKIE", "fake-notification-cookie")
-    monkeypatch.setenv("DATA_DIR", str(tmp_path / "data"))
-    name = "_lanhu_notification_runtime_test"
-    spec = importlib.util.spec_from_file_location(name, ROOT / "lanhu_mcp_server.py")
-    module = importlib.util.module_from_spec(spec)
-    monkeypatch.setitem(sys.modules, name, module)
-    spec.loader.exec_module(module)
-    return module
 
-
-@pytest.mark.parametrize("outcome,expected", [
-    ("known_mention", True), ("unknown_mention", True),
-    ("rejected", False), ("exception", False),
-])
-async def test_notification_diagnostics_use_stderr_only(notification_server, monkeypatch, capsys,
-                                                       outcome, expected):
-    server = notification_server
-    calls = []
-
-    class FakeClient:
-        async def __aenter__(self):
-            return self
-
-        async def __aexit__(self, *args):
-            return False
-
-        async def post(self, url, **kwargs):
-            calls.append((url, kwargs))
-            if outcome == "exception":
-                raise RuntimeError("simulated notification error")
-            return SimpleNamespace(json=lambda: {"code": 1 if outcome == "rejected" else 0})
-
-    monkeypatch.setattr(server.httpx, "AsyncClient", lambda **kwargs: FakeClient())
-    monkeypatch.setattr(server, "FEISHU_USER_ID_MAP", {"FixtureUser": "fake-user-id"})
-    monkeypatch.setattr(server, "FEISHU_WEBHOOK_URL", "https://example.invalid/no-request")
-    capsys.readouterr()
-
-    result = await server.send_feishu_notification(
-        summary="Test notification", content="Fixture content", author_name="Fixture author",
-        author_role="Developer", mentions=["Unknown" if outcome == "unknown_mention" else "FixtureUser"],
-        message_type="normal",
-    )
-
-    output = capsys.readouterr()
-    assert result is expected
-    assert len(calls) == 1
-    assert output.out == ""
-    assert "飞书通知" in output.err
-
-
-def test_single_file_upgrade_keeps_requirement_server_importable(tmp_path):
+def test_single_file_upgrade_keeps_server_importable_without_design_package(tmp_path):
     """Historical deployments often replace only lanhu_mcp_server.py."""
     import subprocess
     import sys
@@ -183,7 +129,7 @@ builtins.__import__ = without_design
 namespace = runpy.run_path(%r, run_name='lanhu_single_file')
 assert namespace['_design_service'] is None
 assert namespace['__version__'] == '1.8.7'
-print('single-file requirement server import ok')
+print('single-file design-to-code server import ok')
 """ % str(Path(__file__).parents[1] / "lanhu_mcp_server.py"),
         encoding="utf-8",
     )
@@ -191,7 +137,7 @@ print('single-file requirement server import ok')
         [sys.executable, str(script)], cwd=tmp_path, capture_output=True, text=True, timeout=30
     )
     assert result.returncode == 0, result.stderr
-    assert "single-file requirement server import ok" in result.stdout
+    assert "single-file design-to-code server import ok" in result.stdout
 
 
 def test_embedded_design_package_makes_main_server_a_full_single_file(tmp_path):

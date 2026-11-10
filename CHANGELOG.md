@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Slimmed this fork to a design-to-code MCP: kept design listing, overview, region inspection, asset export, slice metadata, invite-link resolution, and the legacy HTML/CSS preview tool.
+- Removed requirement/PRD (Axure) analysis tools, the team message board, collaborator tracking, and Feishu notifications, plus the helpers, tests, and docs that only they used.
+- Dropped unused `beautifulsoup4` and `lxml` dependencies.
+
+
 ## [1.8.7] - 2026-10-13
 
 ### Added

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "lanhu-mcp-server"
 dynamic = ["version"]
-description = "A powerful MCP server for automatically extracting and analyzing Lanhu design documents"
+description = "A slim MCP server for Lanhu design-to-code: design pages, specs, styles, screenshots, and slices"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -19,12 +19,12 @@ keywords = [
     "mcp",
     "model-context-protocol",
     "lanhu",
-    "axure",
     "design",
-    "prototype",
-    "ai",
-    "collaboration",
-    "requirements-analysis"
+    "design-to-code",
+    "ui",
+    "frontend",
+    "assets",
+    "ai"
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -43,9 +43,7 @@ dependencies = [
     "fastmcp>=3.0.2,<4",
     "httpx>=0.27.0",
     "socksio>=1.0.0",
-    "beautifulsoup4>=4.12.0",
     "playwright>=1.48.0",
-    "lxml>=5.0.0",
     "pillow>=10.4.0",
     "python-dotenv>=1.0.0",
     "htmlmin2>=0.1.12",
@@ -66,12 +64,12 @@ security = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/dsphper/lanhu-mcp"
-Documentation = "https://github.com/dsphper/lanhu-mcp#readme"
-Repository = "https://github.com/dsphper/lanhu-mcp"
-"Bug Tracker" = "https://github.com/dsphper/lanhu-mcp/issues"
-Changelog = "https://github.com/dsphper/lanhu-mcp/blob/main/CHANGELOG.md"
-"Source Code" = "https://github.com/dsphper/lanhu-mcp"
+Homepage = "https://github.com/agent-asurada/lanhu-mcp"
+Documentation = "https://github.com/agent-asurada/lanhu-mcp#readme"
+Repository = "https://github.com/agent-asurada/lanhu-mcp"
+"Bug Tracker" = "https://github.com/agent-asurada/lanhu-mcp/issues"
+Changelog = "https://github.com/agent-asurada/lanhu-mcp/blob/main/CHANGELOG.md"
+"Source Code" = "https://github.com/agent-asurada/lanhu-mcp"
 
 [project.scripts]
 lanhu-mcp = "lanhu_mcp_server:main"

@@ -139,7 +139,7 @@ async def fetch_metadata(url: str, use_cache: bool = True) -> dict:
 
 #### 命名约定
 
-- 类名：`PascalCase` (例如：`MessageStore`, `LanhuExtractor`)
+- 类名：`PascalCase` (例如：`LanhuExtractor`, `DesignService`)
 - 函数名：`snake_case` (例如：`get_pages_list`, `send_notification`)
 - 常量：`UPPER_CASE` (例如：`BASE_URL`, `DEFAULT_COOKIE`)
 - 私有成员：前缀 `_` (例如：`_load_cache`, `_metadata_cache`)
@@ -164,23 +164,17 @@ except httpx.HTTPStatusError as e:
 如果您添加了新功能，请编写相应的测试：
 
 ```python
-# tests/test_message_store.py
-import pytest
-from lanhu_mcp_server import MessageStore
+# tests/test_url_parsing.py
+from lanhu_mcp_server import LanhuExtractor
 
-def test_save_message():
-    """测试消息保存功能"""
-    store = MessageStore("test_project")
-    msg = store.save_message(
-        summary="Test message",
-        content="Test content",
-        author_name="Test User",
-        author_role="Developer"
+def test_url_parsing():
+    """测试设计稿 URL 解析"""
+    extractor = LanhuExtractor()
+    params = extractor.parse_url(
+        "https://lanhuapp.com/web/#/item/project/stage?tid=t&pid=p"
     )
-
-    assert msg["id"] == 1
-    assert msg["summary"] == "Test message"
-    assert msg["author_name"] == "Test User"
+    assert params["project_id"] == "p"
+    assert params["team_id"] == "t"
 ```
 
 ### 📖 文档
@@ -315,7 +309,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 #### Naming Conventions
 
-- Class names: `PascalCase` (e.g., `MessageStore`, `LanhuExtractor`)
+- Class names: `PascalCase` (e.g., `LanhuExtractor`, `DesignService`)
 - Function names: `snake_case` (e.g., `get_pages_list`, `send_notification`)
 - Constants: `UPPER_CASE` (e.g., `BASE_URL`, `DEFAULT_COOKIE`)
 - Private members: prefix `_` (e.g., `_load_cache`, `_metadata_cache`)

@@ -45,8 +45,6 @@ bash easy-install.sh        # Windows: easy-install.bat
 
 先在项目目录用 `pwd`（Windows 用 `cd`）得到绝对路径，替换 `<ABS_PATH>`。
 
-`env` 中至少设置 `LANHU_USER_ROLE`；可选 `LANHU_USER_NAME` 用于协作追踪和 @提醒。
-
 ### 推荐：通过 `/bin/bash` 启动（兼容性更好）
 
 Linux / macOS：
@@ -56,10 +54,7 @@ Linux / macOS：
   "mcpServers": {
     "lanhu": {
       "command": "/bin/bash",
-      "args": ["<ABS_PATH>/run-stdio.sh"],
-      "env": {
-        "LANHU_USER_ROLE": "Developer"
-      }
+      "args": ["<ABS_PATH>/run-stdio.sh"]
     }
   }
 }
@@ -76,10 +71,7 @@ Windows 可直接指向 `.bat`，或使用 `cmd /c`（见 [README.md](README.md)
   "mcpServers": {
     "lanhu": {
       "command": "<ABS_PATH>/run-stdio.sh",
-      "args": [],
-      "env": {
-        "LANHU_USER_ROLE": "Developer"
-      }
+      "args": []
     }
   }
 }
@@ -106,7 +98,6 @@ Codex 用 TOML（字段名因客户端而异，语义相同）：
 [mcp_servers.lanhu]
 command = "/bin/bash"
 args = ["<ABS_PATH>/run-stdio.sh"]
-env = { LANHU_USER_ROLE = "Developer" }
 ```
 
 opencode 的字段名不同（`command` 是数组，环境变量叫 `environment`，需要 `type: local`）：
@@ -117,9 +108,6 @@ opencode 的字段名不同（`command` 是数组，环境变量叫 `environment
     "lanhu": {
       "type": "local",
       "command": ["/bin/bash", "<ABS_PATH>/run-stdio.sh"],
-      "environment": {
-        "LANHU_USER_ROLE": "Developer"
-      },
       "enabled": true
     }
   }
@@ -129,7 +117,7 @@ opencode 的字段名不同（`command` 是数组，环境变量叫 `environment
 Claude Code 也可以用命令注册（等价于编辑配置文件）：
 
 ```bash
-claude mcp add lanhu -s user -e LANHU_USER_ROLE=Developer -- /bin/bash <ABS_PATH>/run-stdio.sh
+claude mcp add lanhu -s user -- /bin/bash <ABS_PATH>/run-stdio.sh
 ```
 
 提示：

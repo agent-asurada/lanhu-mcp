@@ -20,7 +20,6 @@ services:
       - SERVER_HOST=0.0.0.0
       - SERVER_PORT=8000
       # LANHU_COOKIE 从 .env 文件读取
-      # FEISHU_WEBHOOK_URL 从 .env 文件读取（可选）
 
 # ============================================
 # 使用说明
@@ -29,7 +28,6 @@ services:
 # 1. 首次使用前的准备：
 #    - 复制 config.example.env 为 .env
 #    - 编辑 .env 文件，设置你的 LANHU_COOKIE
-#    - （可选）设置 FEISHU_WEBHOOK_URL 启用飞书通知
 #
 # 2. 启动服务：
 #    docker-compose up -d
@@ -48,7 +46,7 @@ services:
 #    {
 #      "mcpServers": {
 #        "lanhu": {
-#          "url": "http://localhost:8000/mcp?role=Developer&name=YourName"
+#          "url": "http://localhost:8000/mcp"
 #        }
 #      }
 #    }

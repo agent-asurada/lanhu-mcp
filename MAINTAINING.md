@@ -17,7 +17,6 @@ python -m pip install -e '.[dev]'
 export LANHU_COOKIE='test-placeholder-not-a-real-cookie'
 export DDS_COOKIE='test-placeholder-not-a-real-cookie'
 export DATA_DIR="$(mktemp -d)"
-export FEISHU_WEBHOOK_URL=''
 python -m pytest
 python -m pip install build twine
 python -m build

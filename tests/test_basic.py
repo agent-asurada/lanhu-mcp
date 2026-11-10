@@ -18,9 +18,7 @@ def test_imports():
     try:
         import fastmcp
         import httpx
-        import bs4
         import playwright
-        import lxml
         assert True
     except ImportError as e:
         assert False, f"Import failed: {e}"
